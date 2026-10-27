@@ -1,0 +1,7 @@
+# datos: se regeneran con download.ipynb, build_dataset.ipynb y build_panel.ipynb
+src/zips/
+src/data/
+# material de la mentora (no es nuestro)
+docs/professor-materials/
+__pycache__/
+src/temp.txt
