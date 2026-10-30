@@ -10,17 +10,15 @@ Los nombres de archivos y carpetas van en inglés (el contenido de los documento
 
 - `TODO.md`: tareas pendientes del proyecto.
 - `src/`: notebooks.
-  - `download.ipynb`: descarga un zip por trimestre en `src/zips/` (2018q1 en adelante).
-  - `build_dataset.ipynb`: arma el dataset. Genera `src/data/sub.csv` (documentos 10-K, 10-Q y sus enmiendas de salud y energía, con columnas `sector` y `zip`) y `src/data/num.csv` (primera versión publicada de cada número, solo en USD).
-  - `survivorship_bias.ipynb`: sesgo de supervivencia. Cuenta las empresas con presentación en cada trimestre 2018–2023, cuántas tienen los 24 trimestres y por qué quedan afuera las demás. Lee `data/sub.csv`.
-  - `filing_delay.ipynb`: atraso entre `period` y `filed`. Justifica que los zips 2018q1–2024q4 alcanzan para los períodos 2018–2023. Lee `data/sub.csv`.
-  - `mentor_concepts.ipynb`: cuántos sobrevivientes tienen los 9 conceptos en los 24 trimestres con tres opciones acumulativas: tags de la mentora, + `concepts.py`, + nuestras construcciones. Lee `data/*.csv`.
-  - `build_panel.ipynb`: arma `src/data/panel.csv` (una fila por empresa y trimestre calendario, 9 conceptos) con los sobrevivientes y los tags de la mentora. Calcula los flujos trimestrales. Lee `data/*.csv`.
-  - `concepts_justification.ipynb`: justifica con datos cada lista de `CONCEPTS` y cada número de `docs/ratios.md` (tag de la línea del estado, aporte de cada tag, orden con el detalle de ingresos, alternativos de la profesora, construcciones). Lee `pre.txt` de los zips.
-  - `shared/`: código que usan varios notebooks; se importa con `from shared.<módulo> import ...`. `concepts.py` tiene `CONCEPTS` (concepto → tags en orden de prioridad). Quedó obsoleto el 2026-10-27: el panel usa los tags de la mentora.
-  - `exploration.ipynb`: exploración del usuario. Todavía lee `tmp/*.txt`, una carpeta que ya no existe.
+  - Orden de ejecución: `download` → `build_dataset` → `bankruptcy` → `build_panel`.
+  - `download.ipynb`: descarga un zip por trimestre en `src/zips/` (2018q1 a 2025q4).
+  - `build_dataset.ipynb`: arma el dataset. Genera `src/data/sub.csv` (documentos 10-K, 10-Q y sus enmiendas de salud y energía, con columnas `sector` y `zip`) y `src/data/num.csv` (una versión de cada número, la foto de la base al 31/12/2023; solo en USD).
+  - `bankruptcy.ipynb`: fecha de quiebra de cada empresa (8-K con ítem 1.03) con la API `data.sec.gov/submissions`. Guarda todos los 8-K con ítem 1.03 en `src/data/bankruptcy_filings.csv` (caché: si existe, no consulta a la SEC) y la quiebra que empieza dentro de `START`–`END` en `src/data/bankruptcy.csv`.
+  - `build_panel.ipynb`: arma `src/data/panel.csv`: una fila por empresa y trimestre calendario 2018Q1–2024Q4, panel no balanceado, columnas en español (conceptos, ratios y `fecha_quiebra`). Una empresa que quiebra deja de tener filas desde el trimestre de la quiebra.
+  - `shared/`: código que usan varios notebooks; se importa con `from shared.<módulo> import ...`. `concepts.py` tiene `CONCEPTS` (concepto → tags en orden de prioridad, los de la guía de la mentora).
+  - Los notebooks de análisis (sesgo de supervivencia, atraso de presentación, cobertura de tags) se borraron el 2026-10-30 y se rehacen en una etapa posterior. Están en el historial de git.
 - `src/zips/<AAAA>q<N>.zip`: un zip por trimestre de **presentación**, no por trimestre del período. Cada zip trae `sub.txt`, `num.txt`, `pre.txt`, `tag.txt` y `readme.htm`.
-- `docs/`: `financial-statements-guide.md` (guía de estudio), `decisions.md` (decisiones metodológicas del dataset y su porqué; al tomar una decisión nueva, agregarla ahí) `ratios.md` (qué mide cada ratio, tags de cada concepto y cómo construir un concepto que falta) y `ACLARACIONES.md` (explicaciones puntuales que pide el usuario, por ejemplo `inpth`).
+- `docs/`: `rumbo-mai.pdf` (el rumbo que definió el grupo: objetivos, variables, ratios y requerimientos de la base; **manda sobre cualquier otro documento**), `decisions.md` (decisiones metodológicas del dataset y su porqué; al tomar una decisión nueva, agregarla ahí), `conceptos.md` (notas del usuario) y `sec-edgar-overview.md`.
 - Toda decisión que toma el usuario lleva el sufijo `(DECISIÓN TOMADA)` al final de su renglón, en `docs/` y en `TODO.md`. El equipo tiene más personas y el sufijo marca qué decidió el usuario. Una propuesta o un pendiente no lleva el sufijo.
 - `docs/professor-materials/`: material de la mentora: `dataset-description.pdf` (consigna), `sec-edgar-guide.docx` (guía de la base, tags y ratios sugeridos) y `sec-edgar-notebook.ipynb` (ejemplo de la Opción B, Colab).
 - Las propuestas de los mentores, con las consignas por checkpoint, están en `~/FAMAF/Diplodatos-etc/propuestas-MAI.zip`.
