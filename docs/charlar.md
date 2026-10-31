@@ -2,15 +2,11 @@
 
 La regla que habiamos dicho era asignarlo al trimestre calendario que contiene la mayoría de esos meses, 2 de 3
 
-┌───────────────┬────────────────────────────┬─────────────────────────────┬─────────────────────┐
-│    Cierre     │ Meses del trimestre fiscal │        ¿Dónde caen?         │        Va a         │
-├───────────────┼────────────────────────────┼─────────────────────────────┼─────────────────────┤
-│ 31 de marzo   │ ene, feb, mar              │ los 3 en Q1                 │ Q1                  │
-├───────────────┼────────────────────────────┼─────────────────────────────┼─────────────────────┤
-│ 31 de enero   │ nov, dic, ene              │ 2 en Q4, 1 en Q1            │ Q4 del año anterior │
-├───────────────┼────────────────────────────┼─────────────────────────────┼─────────────────────┤
-│ 28 de febrero │ dic, ene, feb              │ 1 en Q4, 2 en Q1            │ Q1                  │
-└───────────────┴────────────────────────────┴─────────────────────────────┴─────────────────────┘
+| Cierre | Meses del trimestre fiscal | ¿Dónde caen? | Va a |
+|---|---|---|---|
+| 31 de marzo | ene, feb, mar | los 3 en Q1 | Q1 |
+| 31 de enero | nov, dic, ene | 2 en Q4, 1 en Q1 | Q4 del año anterior |
+| 28 de febrero | dic, ene, feb | 1 en Q4, 2 en Q1 | Q1 |
 
 # Quiebra: no se sale
 
