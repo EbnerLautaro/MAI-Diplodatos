@@ -5,3 +5,6 @@ src/data/
 docs/professor-materials/
 __pycache__/
 src/temp.txt
+
+.claude/
+.vscode/

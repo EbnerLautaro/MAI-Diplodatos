@@ -12,7 +12,7 @@ Este documento registra cada decisión de `src/build_dataset.ipynb` y `src/build
 
 ## 2. Sectores por código SIC
 
-**Decisión.** Salud es SIC 8000–8099 y energía es SIC 1300–1399. El SIC (Standard Industrial Classification) sale de la columna `sic` de `sub.txt`. (DECISIÓN TOMADA)
+**Decisión.** Salud es SIC 8000–8099 y energía es SIC 1300–1399. En `sub.csv` la columna `sector` vale `salud` o `energia`. El SIC (Standard Industrial Classification) sale de la columna `sic` de `sub.txt`. (DECISIÓN TOMADA)
 
 **Por qué.** Son los rangos de la consigna de la Opción 3.
 
@@ -31,9 +31,9 @@ Este documento registra cada decisión de `src/build_dataset.ipynb` y `src/build
 - Los 8-K de los zips (unos 2 por trimestre en estos sectores) son comunicados con cifras, no estados contables. Si entraran, una cifra de un comunicado podría reemplazar a la del 10-Q. La quiebra sale de los 8-K con el ítem 1.03, pero de la API de la SEC, no de los zips (`src/bankruptcy.ipynb`).
 - Los otros formularios (S-1, 20-F, etc.) no son estados contables trimestrales o anuales de empresas de EE. UU.
 
-## 4. Columnas de `sub.txt` que se eliminan
+## 4. Columnas de `sub.txt` que no se leen
 
-**Decisión.** Se eliminan `ein`, `former`, `changed`, las 13 columnas de dirección, `countryinc`, `stprinc`, `afs`, `wksi`, `accepted`, `instance`, `detail`, `nciks` y `aciks`. (DECISIÓN TOMADA)
+**Decisión.** No se leen (`usecols`) `ein`, `former`, `changed`, las 13 columnas de dirección, `countryinc`, `stprinc`, `afs`, `wksi`, `accepted`, `instance`, `detail`, `nciks` y `aciks`. (DECISIÓN TOMADA)
 
 **Por qué.** No aportan al análisis: son datos de contacto, nombres anteriores, la categoría de presentador ante la SEC (`afs`) y detalles técnicos del archivo XBRL (el formato de etiquetas de los estados contables). `filed` **no** se elimina, porque la sección 8 la necesita.
 
@@ -116,7 +116,7 @@ El código ordena por `["filed", "form"]`, aplica `keep="last"` a las filas con 
 
 **Paso previo.** Se conservan solo las fechas de cierre de los documentos de la empresa (`sub.period`). Así se eliminan subperíodos, por ejemplo los de una empresa que sale de una quiebra (Gulfport Energy, 2021), y los comparativos con otro calendario (Sustainable Projects cambió su cierre de mayo a diciembre). Reemplaza al filtro anterior (meses de cierre módulo 3), que no resolvía a Sustainable Projects. (DECISIÓN TOMADA)
 
-El código está en `src/build_panel.ipynb`, paso 4.
+El trimestre de cada número se calcula en `src/build_dataset.ipynb` (paso 4, columna `quarter` de `num.csv`). El filtro de las fechas de cierre está en `src/build_panel.ipynb`, paso 4.
 
 **Por qué.**
 - El panel compara empresas en la misma fila. La regla elige el trimestre calendario que más se superpone con el trimestre fiscal: 2 de 3 meses.

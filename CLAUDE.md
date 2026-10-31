@@ -12,7 +12,7 @@ Los nombres de archivos y carpetas van en inglés (el contenido de los documento
 - `src/`: notebooks.
   - Orden de ejecución: `download` → `build_dataset` → `bankruptcy` → `build_panel`.
   - `download.ipynb`: descarga un zip por trimestre en `src/zips/` (2018q1 a 2025q4).
-  - `build_dataset.ipynb`: arma el dataset. Genera `src/data/sub.csv` (documentos 10-K, 10-Q y sus enmiendas de salud y energía, con columnas `sector` y `zip`) y `src/data/num.csv` (una versión de cada número, la foto de la base al 31/12/2023; solo en USD).
+  - `build_dataset.ipynb`: arma el dataset. Genera `src/data/sub.csv` (documentos 10-K, 10-Q y sus enmiendas de salud y energía, con columnas `sector` y `zip`) y `src/data/num.csv` (una versión de cada número, la foto de la base al 31/12/2023; solo en USD; columna `quarter` con el trimestre calendario de `ddate`). `sector` vale `salud` o `energia`.
   - `bankruptcy.ipynb`: fecha de quiebra de cada empresa (8-K con ítem 1.03) con la API `data.sec.gov/submissions`. Guarda todos los 8-K con ítem 1.03 en `src/data/bankruptcy_filings.csv` (caché: si existe, no consulta a la SEC) y la quiebra que empieza dentro de `START`–`END` en `src/data/bankruptcy.csv`.
   - `build_panel.ipynb`: arma `src/data/panel.csv`: una fila por empresa y trimestre calendario 2018Q1–2024Q4, panel no balanceado, columnas en español (conceptos, ratios y `fecha_quiebra`). Una empresa que quiebra deja de tener filas desde el trimestre de la quiebra.
   - `shared/`: código que usan varios notebooks; se importa con `from shared.<módulo> import ...`. `concepts.py` tiene `CONCEPTS` (concepto → tags en orden de prioridad, los de la guía de la mentora).

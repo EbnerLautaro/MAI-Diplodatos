@@ -4,6 +4,7 @@
   "[python]": {
     "editor.defaultFormatter": "charliermarsh.ruff"
   },
+  "editor.formatOnSave": true,
   "workbench.tree.indent": 20,
   "notebook.lineNumbers": "on",
   "notebook.cellToolbarVisibility": "hover",
