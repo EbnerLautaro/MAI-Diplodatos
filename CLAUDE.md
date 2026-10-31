@@ -26,7 +26,8 @@ Los nombres de archivos y carpetas van en inglés (el contenido de los documento
 
 ## Entorno
 
-- Entorno pyenv `Diplodatos` (Python 3.14), fijado con `.python-version`. Es el mismo entorno de toda la diplomatura; ver `../CLAUDE.md`.
+- Entorno pyenv `Diplodatos` (Python 3.14), fijado con `.python-version`.
+- `requirements.txt`: paquetes que importan los notebooks, con la versión del entorno. Instalar con `~/.pyenv/versions/Diplodatos/bin/pip install -r requirements.txt`. Es el mismo entorno de toda la diplomatura; ver `../CLAUDE.md`.
 - Para ejecutar Python sobre los zips desde la terminal: `~/.pyenv/versions/Diplodatos/bin/python -I`.
 - Para ejecutar un notebook desde la terminal (desde `src/`): `~/.pyenv/versions/Diplodatos/bin/jupyter nbconvert --to notebook --execute --inplace <notebook>`.
 
