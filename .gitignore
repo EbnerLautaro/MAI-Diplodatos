@@ -1,4 +1,4 @@
-# datos: se regeneran con download.ipynb, build_dataset.ipynb y build_panel.ipynb
+# datos: se regeneran con los notebooks de src/ (01_download a 04_build_panel)
 src/zips/
 src/data/
 # material de la mentora (no es nuestro)

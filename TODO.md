@@ -5,12 +5,14 @@ El rumbo del grupo está en `docs/rumbo-mai.pdf` y manda sobre todo lo demás. C
 ## Pipeline (rumbo, 2026-10-30)
 
 - [x] Borrar los notebooks de análisis, `docs/ratios.md` y `docs/ACLARACIONES.md`. Se rehacen en una etapa posterior. (DECISIÓN TOMADA)
-- [x] `download.ipynb`: zips hasta 2025q4, para el período 2018Q1–2024Q4. `decisions.md`, sección 1. (DECISIÓN TOMADA)
-- [x] `build_dataset.ipynb`: 10-K, 10-Q y sus `/A`, sin 8-K. `decisions.md`, sección 3. (DECISIÓN TOMADA)
-- [x] `build_dataset.ipynb`: versión de cada número = foto de la base al 31/12/2023 (la última hasta el corte; si no hay, la primera después). `decisions.md`, sección 8. (DECISIÓN TOMADA)
+- [x] `01_download.ipynb`: zips hasta 2025q4, para el período 2018Q1–2024Q4. `decisions.md`, sección 1. (DECISIÓN TOMADA)
+- [x] `02_build_dataset.ipynb`: 10-K, 10-Q y sus `/A`, sin 8-K. `decisions.md`, sección 3. (DECISIÓN TOMADA)
+- [x] `02_build_dataset.ipynb`: versión de cada número = foto de la base al 31/12/2023 (la última hasta el corte; si no hay, la primera después). `decisions.md`, sección 8. (DECISIÓN TOMADA)
 - [x] `concepts.py`: `ProfitLoss` como alternativo del resultado neto, caja y costo de ventas (para construir la ganancia bruta). `decisions.md`, sección 12. (DECISIÓN TOMADA)
-- [x] `bankruptcy.ipynb`: quiebras hasta el 31/12/2025 (un año de horizonte después del panel); guarda `data/bankruptcy.csv`.
-- [x] `build_panel.ipynb`: panel no balanceado con las empresas con datos en 2018Q1, columnas en español, 8 ratios en fracción y corte desde el trimestre de la quiebra. `decisions.md`, secciones 12 y 13. (DECISIÓN TOMADA)
+- [x] `03_bankruptcy.ipynb`: quiebras hasta el 31/12/2025 (un año de horizonte después del panel); guarda `data/bankruptcy.csv`.
+- [x] `04_build_panel.ipynb`: panel no balanceado con las empresas con datos en 2018Q1, columnas en español, 8 ratios en fracción y corte desde el trimestre de la quiebra. `decisions.md`, secciones 12 y 13. (DECISIÓN TOMADA)
+- [x] Notebooks con el número de su paso en el pipeline: `01_download` a `05_eda_panel` (2026-10-31). (DECISIÓN TOMADA)
+- [ ] `05_eda_panel.ipynb`: por ahora solo carga `data/panel.csv`. Falta el EDA.
 
 ## Pendientes
 

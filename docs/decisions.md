@@ -1,6 +1,6 @@
 # Decisiones metodológicas del dataset
 
-Este documento registra cada decisión de `src/build_dataset.ipynb` y `src/build_panel.ipynb` y su justificación. Sirve de base para la sección de metodología del informe. El rumbo del grupo (`docs/rumbo-mai.pdf`) manda sobre este documento: si chocan, gana el rumbo. Algunas cifras de abajo son de la versión anterior del dataset (zips 2018q1–2024q4, sin enmiendas) y hay que recalcularlas.
+Este documento registra cada decisión de `src/02_build_dataset.ipynb` y `src/04_build_panel.ipynb` y su justificación. Sirve de base para la sección de metodología del informe. El rumbo del grupo (`docs/rumbo-mai.pdf`) manda sobre este documento: si chocan, gana el rumbo. Algunas cifras de abajo son de la versión anterior del dataset (zips 2018q1–2024q4, sin enmiendas) y hay que recalcularlas.
 
 ## 1. Período 2018Q1–2024Q4 y zips 2018q1 a 2025q4
 
@@ -19,7 +19,7 @@ Este documento registra cada decisión de `src/build_dataset.ipynb` y `src/build
 **Empresa que cambia de sector.** Cada empresa tiene un solo sector: el de su documento más reciente por `filed`. Decisión del usuario, 2026-10-26. (DECISIÓN TOMADA)
 - Por qué: sin esta regla, una empresa que cambia de SIC cuenta en los dos sectores. Hoy pasa en 1 empresa: American International Holdings Corp. (SIC 1389, energía, hasta 2019Q2; SIC 8000, salud, desde 2019Q4). Cuenta como salud.
 - Alternativa descartada: eliminar las empresas con más de un sector. No cambia los sobrevivientes, porque esa empresa no tiene los 24 trimestres.
-- Código: `src/build_panel.ipynb`, paso 1.
+- Código: `src/04_build_panel.ipynb`, paso 1.
 
 ## 3. Tipos de documento: 10-K, 10-Q y sus enmiendas
 
@@ -28,7 +28,7 @@ Este documento registra cada decisión de `src/build_dataset.ipynb` y `src/build
 **Por qué.**
 - El 10-Q es el informe trimestral y el 10-K es el anual. El 10-K hace falta para calcular el cuarto trimestre (ver sección 9).
 - Los `/A` son enmiendas. El rumbo acepta las presentadas hasta el 31/12/2023 (sección 8).
-- Los 8-K de los zips (unos 2 por trimestre en estos sectores) son comunicados con cifras, no estados contables. Si entraran, una cifra de un comunicado podría reemplazar a la del 10-Q. La quiebra sale de los 8-K con el ítem 1.03, pero de la API de la SEC, no de los zips (`src/bankruptcy.ipynb`).
+- Los 8-K de los zips (unos 2 por trimestre en estos sectores) son comunicados con cifras, no estados contables. Si entraran, una cifra de un comunicado podría reemplazar a la del 10-Q. La quiebra sale de los 8-K con el ítem 1.03, pero de la API de la SEC, no de los zips (`src/03_bankruptcy.ipynb`).
 - Los otros formularios (S-1, 20-F, etc.) no son estados contables trimestrales o anuales de empresas de EE. UU.
 
 ## 4. Columnas de `sub.txt` que no se leen
@@ -71,11 +71,11 @@ PRECAUCIÓN: los vacíos se eliminan **antes** de elegir la versión (sección 8
 - Si tiene versiones presentadas hasta el 31/12/2023, gana la **última** de ellas. Puede ser una enmienda (`/A`) o el comparativo de un documento posterior.
 - Si no, gana la **primera** presentada después del 31/12/2023. Así los números de 2024 quedan como se publicaron por primera vez.
 
-El código ordena por `["filed", "form"]`, aplica `keep="last"` a las filas con `filed` hasta `CUTOFF` y `keep="first"` a las posteriores, y da prioridad a las primeras (`src/build_dataset.ipynb`, paso 3).
+El código ordena por `["filed", "form"]`, aplica `keep="last"` a las filas con `filed` hasta `CUTOFF` y `keep="first"` a las posteriores, y da prioridad a las primeras (`src/02_build_dataset.ipynb`, paso 3).
 
 **Desempate.** Si dos documentos tienen el mismo `filed`, `form` desempata: `"10-Q"` va antes que `"10-Q/A"` en orden alfabético. Antes del corte gana la enmienda (la última); después, el original (el primero). (DECISIÓN TOMADA)
 
-**`filed` es la fecha en que se conoció la versión elegida.** Esta columna queda en `num.csv`, y `build_panel.ipynb` la lleva al panel como `fecha_presentacion`. Al armar features para predecir en la fecha t, solo se usan filas con `filed` anterior a t. El `ddate` no alcanza: el 10-K de 2020 se presenta entre 60 y 90 días después del 31 de diciembre. (DECISIÓN TOMADA)
+**`filed` es la fecha en que se conoció la versión elegida.** Esta columna queda en `num.csv`, y `04_build_panel.ipynb` la lleva al panel como `fecha_presentacion`. Al armar features para predecir en la fecha t, solo se usan filas con `filed` anterior a t. El `ddate` no alcanza: el 10-K de 2020 se presenta entre 60 y 90 días después del 31 de diciembre. (DECISIÓN TOMADA)
 
 **PRECAUCIÓN: sesgo de anticipación.** En 2018–2023 un número puede ser una corrección presentada años después: el modelo usa en 2019 un valor que en 2019 todavía no se conocía (look-ahead bias). En una prueba con la base anterior, el 6,4% de los números difería entre la primera y la última versión, y las enmiendas llegaban con una mediana de 105 días de atraso. El efecto en la evaluación del modelo es leve si se entrena con 2018–2023 y se evalúa con 2024, porque esa foto es la que se conocía al 31/12/2023. Con `filed` se puede medir: cuando la versión elegida es posterior al trimestre siguiente, el número no se conocía al predecir.
 
@@ -116,7 +116,7 @@ El código ordena por `["filed", "form"]`, aplica `keep="last"` a las filas con 
 
 **Paso previo.** Se conservan solo las fechas de cierre de los documentos de la empresa (`sub.period`). Así se eliminan subperíodos, por ejemplo los de una empresa que sale de una quiebra (Gulfport Energy, 2021), y los comparativos con otro calendario (Sustainable Projects cambió su cierre de mayo a diciembre). Reemplaza al filtro anterior (meses de cierre módulo 3), que no resolvía a Sustainable Projects. (DECISIÓN TOMADA)
 
-El trimestre de cada número se calcula en `src/build_dataset.ipynb` (paso 4, columna `quarter` de `num.csv`). El filtro de las fechas de cierre está en `src/build_panel.ipynb`, paso 4.
+El trimestre de cada número se calcula en `src/02_build_dataset.ipynb` (paso 4, columna `quarter` de `num.csv`). El filtro de las fechas de cierre está en `src/04_build_panel.ipynb`, paso 4.
 
 **Por qué.**
 - El panel compara empresas en la misma fila. La regla elige el trimestre calendario que más se superpone con el trimestre fiscal: 2 de 3 meses.
@@ -151,7 +151,7 @@ El trimestre de cada número se calcula en `src/build_dataset.ipynb` (paso 4, co
 **Empresas que existían al inicio.** Entra una empresa si tiene al menos un concepto con valor en 2018Q1. Quedan afuera las que se crearon (o empezaron a presentar) durante el período, como pide el rumbo. (DECISIÓN TOMADA)
 - PRECAUCIÓN: las empresas jóvenes suelen ser las más riesgosas. Excluirlas puede bajar la cantidad de quiebras observadas.
 
-**Quiebra.** La fecha de quiebra es la del 8-K con el ítem 1.03 ("Bankruptcy or Receivership"), de la API de la SEC (`src/bankruptcy.ipynb`). En el panel, una empresa que quiebra deja de tener filas desde el trimestre calendario de esa fecha. Por ejemplo, una quiebra del 2021-08-15 deja la última fila en 2021Q2. (DECISIÓN TOMADA)
+**Quiebra.** La fecha de quiebra es la del 8-K con el ítem 1.03 ("Bankruptcy or Receivership"), de la API de la SEC (`src/03_bankruptcy.ipynb`). En el panel, una empresa que quiebra deja de tener filas desde el trimestre calendario de esa fecha. Por ejemplo, una quiebra del 2021-08-15 deja la última fila en 2021Q2. (DECISIÓN TOMADA)
 - Se cortan también las empresas en Chapter 11 (reorganización) que siguen presentando, como Gulfport.
 - `fecha_quiebra` cubre hasta el 31/12/2025, un año más que el panel, para poder etiquetar la quiebra en los próximos 2 trimestres o 1 año desde 2024.
 - Una empresa que deja de tener filas sin `fecha_quiebra` salió por otra razón, por ejemplo una compra, o dejó de presentar.
