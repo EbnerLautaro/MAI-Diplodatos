@@ -4,6 +4,13 @@ Proyecto del MAI (Módulo de Aplicaciones Integradoras) de la diplomatura. Base:
 
 **Al empezar una sesión nueva, leer `TODO.md`.** Tiene las tareas pendientes y las decisiones ya tomadas sobre cómo armar el dataset. Cuando el usuario pida anotar algo "en la lista de TODO", agregarlo ahí; marcar `[x]` lo que se termine.
 
+## Git: una rama por persona (REGLA)
+
+- **Cada integrante trabaja en su propia rama, con su apellido en minúsculas** (ej.: `ebner`). Nadie commitea directo en `main`.
+- Antes de commitear, verificar con `git branch --show-current` que la rama sea la de quien trabaja (`git config user.name` dice quién es). Si no lo es, cambiar a esa rama (o crearla desde `main`) antes de commitear.
+- Nunca commitear ni pushear en la rama de otro integrante, ni en `main`. Pushear solo la rama propia: `git push origin <apellido>`.
+- Lo que va a `main` entra por merge o pull request, y solo cuando la persona lo pide.
+
 ## Estructura
 
 Los nombres de archivos y carpetas van en inglés (el contenido de los documentos, en español).
