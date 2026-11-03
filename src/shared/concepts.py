@@ -6,6 +6,8 @@ CONCEPTS = {
         "Revenues",
         "SalesRevenueNet",
         "RevenueFromContractWithCustomerExcludingAssessedTax",
+        # no es de la profesora: el mismo ingreso con los impuestos cobrados
+        "RevenueFromContractWithCustomerIncludingAssessedTax",
     ],
     # Resultado operativo (EBIT)
     "resultado_operativo": ["OperatingIncomeLoss"],

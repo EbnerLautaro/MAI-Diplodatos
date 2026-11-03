@@ -12,7 +12,14 @@ El rumbo del grupo está en `docs/rumbo-mai.pdf` y manda sobre todo lo demás. C
 - [x] `03_bankruptcy.ipynb`: quiebras hasta el 31/12/2025 (un año de horizonte después del panel); guarda `data/bankruptcy.csv`.
 - [x] `04_build_panel.ipynb`: panel no balanceado con las empresas con datos en 2018Q1, columnas en español, 8 ratios en fracción y corte desde el trimestre de la quiebra. `decisions.md`, secciones 12 y 13. (DECISIÓN TOMADA)
 - [x] Notebooks con el número de su paso en el pipeline: `01_download` a `05_eda_panel` (2026-10-31). (DECISIÓN TOMADA)
-- [ ] `05_eda_panel.ipynb`: por ahora solo carga `data/panel.csv`. Falta el EDA.
+- [x] `05_eda_panel.ipynb`: el EDA usa `panel_qc` (quiebras y empresas con los 28 trimestres). `decisions.md`, sección 14. (DECISIÓN TOMADA)
+- [x] `concepts.py`: los 6 tags de costo de ventas que se probaron (`CostOfGoodsAndServicesSold` y 5 más) se sacaron porque daban márgenes brutos falsos en E&P y hospitales. `decisions.md`, sección 12. (DECISIÓN TOMADA)
+- [x] `concepts.py`: `RevenueFromContractWithCustomerIncludingAssessedTax` como cuarto tag de `ingresos_netos`. `decisions.md`, sección 12. (DECISIÓN TOMADA)
+- [ ] Volver a ejecutar `04_build_panel.ipynb` (reiniciando el kernel) con `costo_ventas` revertido, y después `05_eda_panel.ipynb`.
+- [x] `05_eda_panel.ipynb`, fase 1: panorama (tipo de salida, empresas por trimestre, quiebras por año).
+- [ ] `05_eda_panel.ipynb`, fase 2: diagnóstico de faltantes (% NaN por concepto y sector, "nunca" vs "a veces", quiénes son, ratios vacíos).
+- [ ] `05_eda_panel.ipynb`, fase 3: tratamiento de faltantes sin datos nuevos (eliminar columnas o empresas, completar solo saldos con huecos de 1 trimestre).
+- [ ] `05_eda_panel.ipynb`, fases 4 y 5: consistencia, outliers y la historia por sector (COVID).
 
 ## Pendientes
 

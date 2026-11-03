@@ -134,7 +134,18 @@ El trimestre de cada número se calcula en `src/02_build_dataset.ipynb` (paso 4,
 - Caja: `CashAndCashEquivalentsAtCarryingValue` y `CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents`, los tags del rumbo. (DECISIÓN TOMADA)
 - `StockholdersEquityAttributableToParent` (alternativo de la mentora para el patrimonio) no aparece en ningún documento de los dos sectores. Queda en la lista, pero no aporta.
 
+**Cuarto tag de ingresos.** Después de `Revenues`, `SalesRevenueNet` y `RevenueFromContractWithCustomerExcludingAssessedTax`, `ingresos_netos` usa `RevenueFromContractWithCustomerIncludingAssessedTax`. Decisión del usuario, 2026-11-03. (DECISIÓN TOMADA)
+- Por qué: es el mismo ingreso por contratos con clientes (norma ASC 606), pero incluye los impuestos que la empresa cobra a sus clientes. Donde una empresa reporta los dos, coinciden en la mediana (diferencia máxima 7%).
+- Efecto en `panel_qc` (celdas empresa × trimestre con dato, panel regenerado): los ingresos pasan del 86,8% al 97,3% en energía y del 81,4% al 94,7% en salud. Por arrastre suben los márgenes y `fco_ingresos` (margen neto: del 85,0% al 94,5% en energía y del 79,3% al 92,6% en salud). Ningún ingreso que ya existía cambia. Entre las empresas que recupera están HCA Healthcare, Halliburton, Teladoc, Surgery Partners y Brookdale Senior Living.
+- PRECAUCIÓN: los ingresos por contratos con clientes son unos 4% menores que `Revenues` en la mediana, porque `Revenues` suma ingresos que no vienen de contratos (derivados, alquileres, otros). La diferencia ya existía con el tercer tag.
+
 **Construcción de la ganancia bruta.** Si falta `GrossProfit`, ganancia bruta = ingresos netos − costo de ventas (`CostOfRevenue` o `CostOfGoodsSold`), como indica la guía de la mentora. `GrossProfit` lo reporta solo una minoría de las empresas, sobre todo en energía. El costo de ventas no queda en el panel. (DECISIÓN TOMADA)
+
+**Más tags de costo de ventas: probado y revertido.** El 2026-11-03 se agregaron a `costo_ventas` seis tags que no son de la profesora (`CostOfGoodsAndServicesSold`, `CostOfServices`, `CostOfServicesOilAndGas`, `CostOfGoodsSoldOilAndGas`, `DirectOperatingCosts` y `OtherCostOfOperatingRevenue`) y el mismo día se sacaron. `costo_ventas` sigue siendo `CostOfRevenue` y `CostOfGoodsSold`, los de la guía de la profesora. Decisión del usuario, 2026-11-03. (DECISIÓN TOMADA)
+- Por qué se sacaron: subían la cobertura de la ganancia bruta en energía del 10% al 32% de las celdas de `panel_qc`, pero con valores falsos. En las petroleras de exploración y producción (SIC 1311) y en los hospitales, esos tags guardan solo una parte del costo (comercialización o petróleo comprado a terceros en Devon, Diamondback y Pioneer; insumos en Community Health Systems). Mediana del margen bruto en `panel_qc`: 0,85 con `CostOfGoodsAndServicesSold` en E&P (368 celdas, 23 empresas) contra 0,13 en las E&P que reportan `GrossProfit`; 0,84 en hospitales; 0,92–0,98 con `OtherCostOfOperatingRevenue`, que por definición es solo una parte del costo.
+- La validación que se había usado (coincidencia del 97,5% con `GrossProfit`) no cubría a las E&P: casi ninguna reporta `GrossProfit`.
+- Evidencia: el informe `reports/Cobertura de ganancia bruta.md`.
+- PRECAUCIÓN: con los tags de la profesora, la ganancia bruta queda en el 10,7% de las celdas de energía y el 33,4% de las de salud (`panel_qc`), casi toda reportada como `GrossProfit`. Falta porque la mayoría de las E&P y de los hospitales no presenta costo de ventas ni ganancia bruta (ninguna norma lo exige). Quedan unas 12 celdas de E&P construidas con `CostOfRevenue` con margen mediano 0,61, contra 0,13 de las reportadas.
 
 **Un tag por trimestre (regla A).** En cada empresa, concepto y trimestre se usa el primer tag con valor. Una empresa puede cambiar de tag entre trimestres. Decisión del usuario, 2026-10-22. (DECISIÓN TOMADA)
 - Por qué: en el panel anterior, en 26 de los 35 cambios de tag los valores coincidían. Con un tag fijo por empresa (regla B), una empresa que cambió de tag necesita una excepción o queda afuera.
@@ -160,6 +171,16 @@ El trimestre de cada número se calcula en `src/02_build_dataset.ipynb` (paso 4,
 - Si Riley Exploration Permian (antes Tengasco Inc) queda en el panel: probable fusión inversa en 2021.
 - Tratamiento de outliers: recortar los extremos (winsorizar) o marcarlos.
 - ROA y ROE: fecha del saldo y patrimonio negativo (sección 10).
+
+## 14. El EDA usa solo las empresas que quiebran y las completas
+
+**Decisión.** El EDA (`src/05_eda_panel.ipynb`) trabaja con `panel_qc`: las empresas con `fecha_quiebra` y las que tienen fila en los 28 trimestres (2018Q1–2024Q4). Quedan afuera las que salen sin quiebra (sin causa documentada) y las que llegan a 2024Q4 con huecos. `data/panel.csv` no cambia. Decisión del usuario, 2026-11-02. (DECISIÓN TOMADA)
+
+**Por qué.** Una empresa que deja de tener filas sin quebrar (compra, cambio de SIC fuera del sector, paso a formularios extranjeros o dejó de presentar) no aporta a ninguna de las preguntas del rumbo.
+
+**Alcance.** De 331 empresas quedan 181: energía 129 (83 completas y 46 quiebras) y salud 52 (44 y 8). Salen 145 sin quiebra y 5 con huecos.
+
+**PRECAUCIÓN.** Las quiebras pesan más que en el panel completo (energía 36% contra 19%; salud 15% contra 9%), y el panel queda sin los casos difíciles de distinguir de una quiebra. Hay que tenerlo en cuenta al evaluar un modelo de quiebra.
 
 ## Relación con el checklist de la profesora
 
